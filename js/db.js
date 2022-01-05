@@ -179,19 +179,3 @@ if (addPhotoForm) {
 
   })
 }
-
-
-//delete documents
-// const deletePhotoForm = document.querySelector('.delete')
-// if (deletePhotoForm) {
-//   deletePhotoForm.addEventListener('submit', (e) => {
-//     e.preventDefault()
-
-//     const docRef = doc(db, 'Photos', deletePhotoForm.id.value)
-
-//     deleteDoc(docRef)
-//       .then(() => {
-//         deletePhotoForm.reset()
-//       })
-//   })
-// }
