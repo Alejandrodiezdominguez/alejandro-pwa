@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Alejandro PWA</title>
-  <link type="text/css" href="/css/styles.css" rel="stylesheet">
+  <link type="text/css" href="/css/travel.css" rel="stylesheet">
   <link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- ios support -->
@@ -19,59 +19,35 @@
 </head>
 
 <body style="width: 80%; margin: auto;">
-  <div style="text-align: center; width: 315px; margin: auto;">
-    <h1>Instagram World</h1>
-    <br>
-    <img src="/img/icons/icon-48x48.png" alt="" style="border-radius: 50%; float: left;">
-    <ul style="margin-bottom: -25px;">
-      <div style="margin-bottom: -65px;">
-        <li><a>7</a></li>
-        <li><a>120</a></li>
-        <li><a>100</a></li>
-      </div>
-      <br>
-      <div>
-        <li><a>Posts</a></li>
-        <li><a>Followers</a></li>
-        <li><a>Following</a></li>
-      </div>
-    </ul>
-    <span style="float: left;">
-      Travel
-    </span>
+  <div style="text-align: center;">
+    <h2 style="text-align: center;">World Trip 2022</h2>
     <br>
     <br>
-    <span>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-      invidunt ut labore
-    </span>
-    <!-- <h4>On this map you can see all the locations where you have posted a picture</h4>
-    <h4>Do you want to add an image? Try it here:</h4> -->
-    <br>
-    <br>
-    <div style="border: 0.5px solid #DE0046; border-radius: 50%; width: 48px; height:53px;">
-      <div style="background-color: rgb(228, 228, 228); border-radius: 50%; float: left;">
-        <a href="/pages/travel.html"><img src="/img/storyImage_icon.jpg" alt=" Story" width="48px" height="48px"
-            style="border-radius: 50%; border-color: rgb(155, 154, 154); margin-top: 1px;"></a>
-      </div>
+    <a href="/index.html"
+      style="text-decoration: none; text-align: center;  display: inline-block; margin: 0 auto;">Back to the map</a>
+  </div>
+  <div>
+    <img src="/img/icons/icon-48x48.png" alt="" style="border-radius: 50%; margin-left: 35%;">
+    <b>Travel</b>
+    <div id="map"></div>
+    <div style="margin:0px 0px 0px 32%;">
+      <ul>
+        <li><img src="/img/like_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+        <li><img src="/img/comment_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+        <li><img src="/img/share_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+      </ul>
     </div>
+    <span style="margin-left: 28%; margin-top: -10px; position: absolute;">Your personal Travel Map</span>
+  </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <div
-      style="border-color: #000; border-style: solid; width: 68px; height: 60px; margin: auto; border-radius: 10px; ">
-      <a href="/pages/createImage.html"><img style="padding: 10px;" src="/img/addimage_icon.svg" alt="add new image"
-          title="add new image"></a>
-    </div>
+  <div class="image-wrapper">
 
   </div>
-  <div id="map"></div>
 
   <script async defer type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjYBxeAfG9k2IQKneIuNztWidRWxekYls&callback"></script>
   <script src="/js/app.js"></script>
+  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
     import {
@@ -109,10 +85,40 @@
 
     const colRef = collection(db, 'Photos')
 
+    const images = document.querySelector('.image-wrapper')
+
+    const renderImage = (data, id) => {
+
+      const html = `
+      <div data-id="${id}">
+        <img src="/img/icons/icon-48x48.png" alt="" style="border-radius: 50%; margin-left: 35%;">
+          <b>Travel</b>
+        <br>
+          <img src="${data.url}" alt="" height="340px" width="30%" style="margin-left: 35%;">
+          <div style="margin:0px 0px 0px 32%;">
+      <ul>
+        <li><img src="/img/like_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+        <li><img src="/img/comment_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+        <li><img src="/img/share_icon.svg" alt="" height="24px" width="24px" style="margin-left: 35%;"></li>
+      </ul>
+    </div>
+          <span style="margin-left: 28%; margin-top: -10px; margin-bottom:10px; position: absolute;">${data.name}</span>
+      </div>
+      <br>
+      <br>
+      `;
+
+      images.innerHTML += html;
+
+    }
+
     getDocs(colRef)
       .then((snapshot) => {
         let markers = []
         snapshot.docs.forEach((doc) => {
+
+          renderImage(doc.data(), doc.id);
+
           addMarker({ lat: doc.data().position.latitude, lng: doc.data().position.longitude }, doc.data().url, doc.data().name)
         })
         console.log()
@@ -123,11 +129,11 @@
 
 
     var options = {
-      zoom: 1.5,
-      minZoom: 3,
+      zoom: 1,
+      minZoom: 1,
       center: {
         lat: 0,
-        lng: -8
+        lng: 20
       }
     }
     var map = new
@@ -147,7 +153,6 @@
                      <h4 style="text-align: center;">${name}</h4>`,
       })
 
-      infowindow.open(map, marker);
 
       marker.addListener("click", () => {
         infowindow.open({

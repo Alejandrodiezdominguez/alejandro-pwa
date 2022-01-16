@@ -8,7 +8,12 @@ const assets = [
   '/js/app.js',
   '/js/db.js',
   '/css/styles.css',
-  "/img/addimage.svg"
+  "/img/addimage_icon.svg",
+  "/img/comment_icon.svg",
+  "/img/like_icon.svg",
+  "/img/search_icon.svg",
+  "/img/search_icon.svg",
+  "/img/share_icon.svg"
 ];
 
 // cache size limit function
@@ -33,7 +38,6 @@ self.addEventListener('install', evt => {
 
 // activate event
 self.addEventListener('activate', evt => {
-  //console.log('service worker activated');
   evt.waitUntil(
     caches.keys().then(keys => {
       //console.log(keys);

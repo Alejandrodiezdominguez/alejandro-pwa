@@ -1,4 +1,5 @@
 // https://www.youtube.com/watch?v=vK2NoOoqyRo
+//import all firebase dependencies
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
 import {
   getFirestore, collection, getDocs,
@@ -9,6 +10,7 @@ import {
   getStorage, ref, getDownloadURL, uploadString
 } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-storage.js';
 
+//fiirebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAjYBxeAfG9k2IQKneIuNztWidRWxekYls",
   authDomain: "nth-boulder-337209.firebaseapp.com",
@@ -42,6 +44,7 @@ if (addPhotoForm) {
   const snap = document.getElementById("snap");
   const errorMsgElement = document.querySelector('span#errorMsg');
   const submitbtn = document.getElementById('submitbtn');
+  const uploadImagebtn = document.getElementById('uploadImage');
 
   const constraints = {
     audio: false,
@@ -53,6 +56,7 @@ if (addPhotoForm) {
   // Access webcam
   async function init() {
     try {
+      //try to acces webcam and save it in stream
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       handleSuccess(stream);
     } catch (e) {
@@ -60,7 +64,7 @@ if (addPhotoForm) {
     }
   }
 
-  // if webcam acces success 
+  //show the webcamcontent in the video element
   function handleSuccess(stream) {
     window.stream = stream;
     video.srcObject = stream;
@@ -76,10 +80,10 @@ if (addPhotoForm) {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     image.id = "pic";
     image.src = canvas.toDataURL();
+  }
+  );
 
-    setTimeout(function () {
-      console.log("Ready")
-    }, 10000);
+  uploadImagebtn.addEventListener('click', () => {
     //create a filename of the picture
     var fileName = new Date() + '-' + 'base64';
     const storageRef = ref(storage, fileName);
@@ -90,18 +94,17 @@ if (addPhotoForm) {
         addPhotoForm.url.value = downloadurl.toString();
       })
     });
-  }
-  );
+  })
 
 
   //submit the form
   submitbtn.addEventListener('click', (e) => {
     e.preventDefault()
 
-  //checks is picture was uploaded before submitting the form 
+    //checks is picture was uploaded before submitting the form 
     if (!addPhotoForm.url.value) {
       e.preventDefault()
-      alert('take a picture first before submitting a form')
+      alert('upload a picture first before submitting a form')
       return false
     }
     //checks is tag was provided before submitting the form 
@@ -138,7 +141,7 @@ if (addPhotoForm) {
           })
 
         },
-        //if user has no cam a error message should appear
+          //if user has no cam a error message should appear
           function (error) {
             if (error.code == error.PERMISSION_DENIED) {
               alert("User denied the request for Geolocation.")
@@ -169,11 +172,11 @@ if (addPhotoForm) {
         position: new GeoPoint(addPhotoForm.latitude.value, addPhotoForm.longnitude.value),
         url: addPhotoForm.url.value
       }).then(() => {
-         // form and canvas reset
-         addPhotoForm.reset()
-         context.clearRect(0, 0, canvas.width, canvas.height);
-         //and the user will be redirected to main page
-         window.location.href = "/index.html";
+        // form and canvas reset
+        addPhotoForm.reset()
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        //and the user will be redirected to main page
+        window.location.href = "/index.html";
       })
     }
 
